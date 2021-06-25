@@ -8,32 +8,43 @@ import com.ak.ds.api.mappers.OrderMapper;
 import com.ak.ds.dao.implement.OrderDao;
 import com.ak.ds.dao.interfaces.IOrderDao;
 import com.ak.ds.entities.Order;
+import com.ak.ds.services.factories.IServiceFactory;
+import com.ak.ds.services.factories.ServiceFactory;
 import com.ak.ds.services.interfaces.IClientService;
 import com.ak.ds.services.interfaces.IOrderService;
 import com.ak.ds.services.interfaces.IProductService;
 import com.ak.ds.services.interfaces.IStoreService;
 
 public class OrderService implements IOrderService{
+	
+	private OrderService() {
+	}
+	
+	private static OrderService orderService;
+	
+	public static OrderService getOrderService() {
+		if (orderService == null) {
+			orderService = new OrderService();
+		}
+		return orderService;
+	}
 
-	private IOrderDao orderDao = new OrderDao();
+	private IOrderDao orderDao = OrderDao.getOrderDao();
 	
-	private IStoreService storeService = new StoreService();
+	private IServiceFactory serviceFactory  = new ServiceFactory ();
 	
-	private IClientService clientService = new ClientService();
+	private IStoreService storeService = serviceFactory.getStoreService();
 	
-	private IProductService productService = new ProductService();
+	private IClientService clientService = serviceFactory.getClientService();
+	
+	private IProductService productService = serviceFactory.getProductService();
 	
 	public void addOrder(OrderDto orderDto) {
 		orderDao.add(OrderMapper.dtoToEntity(orderDto));
 	}
 	
-	public void addOrder(Long clientId, Long StoreId, Long productId, Integer quantity) {
-		Order order = new Order();
-		order.setClientId(clientId);
-		order.setStoreId(StoreId);
-		order.setProductId(productId);
-		order.setQuantity(quantity);
-		orderDao.add(order);
+	public void addOrder(Long clientId, Long storeId, Long productId, Integer quantity) {
+		orderDao.add(new Order(storeId, clientId, productId, quantity));
 	}
 	
 	public OrderDto getOrderById(Long id) {

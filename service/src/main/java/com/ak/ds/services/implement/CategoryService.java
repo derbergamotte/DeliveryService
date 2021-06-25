@@ -14,8 +14,20 @@ import com.ak.ds.entities.Category;
 import com.ak.ds.services.interfaces.ICategoryService;
 
 public class CategoryService implements ICategoryService{
+	
+	private CategoryService() {
+	}
+	
+	private static CategoryService categoryService;
+	
+	public static CategoryService getCategoryService() {
+		if (categoryService == null) {
+			categoryService = new CategoryService();
+		}
+		return categoryService;
+	}
 
-	private ICategoryDao categoryDao = new CategoryDao();
+	private ICategoryDao categoryDao = CategoryDao.getCategoryDao();
 		
 	public void addCategory(CategoryDto categoryDto) {
 		Category category = CategoryMapper.dtoToEntity(categoryDto);
@@ -24,10 +36,7 @@ public class CategoryService implements ICategoryService{
 	}
 	
 	public void addCategory(String name) {
-		Category category = new Category();
-		category.setName(name);
-		category.setProductsId(new HashSet<Long>());
-		categoryDao.add(category);
+		categoryDao.add(new Category(name, new HashSet<Long>()));
 	}
 	
 	public CategoryDto getCategoryById(Long id) {

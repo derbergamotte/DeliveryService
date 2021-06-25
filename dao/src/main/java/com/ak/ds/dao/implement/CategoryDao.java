@@ -5,7 +5,16 @@ import com.ak.ds.entities.Category;
 
 public class CategoryDao extends AGenericDao<Category> implements ICategoryDao{
 
-	public CategoryDao() {
+	private CategoryDao() {
 		super(Category.class);
+	}
+	
+	private static CategoryDao categoryDao;
+	
+	public static CategoryDao getCategoryDao() {
+		if (categoryDao == null) {
+			categoryDao = new CategoryDao();
+		}
+		return categoryDao;
 	}
 }

@@ -3,22 +3,21 @@ package com.ak.ds.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ak.ds.ui.AnotherInterface;
-import com.ak.ds.ui.IAnotherInterface;
 import com.ak.ds.ui.IUserInterface;
-import com.ak.ds.ui.UserInterface;
+import com.ak.ds.ui.IUserInterfaceFactory;
+import com.ak.ds.ui.UserInterfaceFactory;
 
 public class UtilClassForCreateSomeEntities {
 	
 	public static void create() {
 		
-		IAnotherInterface anotherInterface = new AnotherInterface();
+		IUserInterfaceFactory userInterfaceFactory = new UserInterfaceFactory();
 		
-		IUserInterface userInterface = new UserInterface();
+		IUserInterface userInterface = userInterfaceFactory.createUserInterface();
 		
-		anotherInterface.addCategory("Food");
-		anotherInterface.addCategory("Tool");
-		anotherInterface.addCategory("Car");
+		userInterface.addCategory("Food");
+		userInterface.addCategory("Tool");
+		userInterface.addCategory("Car");
 		
 		userInterface.addClient("Vasia", "Lermantova, 15", "103");
 		userInterface.addClient("Petia", "Pushkina, 22", "111-22-33");
@@ -35,8 +34,8 @@ public class UtilClassForCreateSomeEntities {
 		attributes.add("Iron");
 		userInterface.addProduct("Hammer", categories, attributes, "You can hammer in a nail");
 		categories.clear();
-		categories.add(2L);
 		attributes.clear();
+		categories.add(2L);
 		attributes.add("Iron");
 		userInterface.addProduct("Saw", categories, attributes, "You can't hammer in a nail");
 		

@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.ak.ds.dao.interfaces.IAGenericDao;
@@ -57,7 +56,7 @@ public abstract class AGenericDao<T extends AEntity> implements IAGenericDao<T> 
 		List<T>  listEntities = new ArrayList<>();
 		try {
 			listEntities = Files.walk(Paths.get(getDirectoryPath()))
-					.filter(Predicate.not(p->p.getFileName().equals(Paths.get("autoincrement"))))
+					.filter(p->!p.getFileName().equals(Paths.get("autoincrement")))
 					.filter(Files::isRegularFile)
 					.map(p -> {
 						T entity = null;

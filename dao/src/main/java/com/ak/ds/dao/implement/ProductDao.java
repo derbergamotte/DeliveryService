@@ -8,10 +8,19 @@ import com.ak.ds.entities.Product;
 
 public class ProductDao extends AGenericDao<Product> implements IProductDao{
 	
-	public ProductDao() {
+	private ProductDao() {
 		super(Product.class);
 	}
-	
+
+	private static ProductDao productDao;
+
+	public static ProductDao getProductDao() {
+		if (productDao == null) {
+			productDao = new ProductDao();
+		}
+		return productDao;
+	}
+
 	public List<Product> findByAttributes(List<String> listAttributes) {
 		List<Product> listProducts = new ArrayList<>();
 		for (Product product : getAll()) {
@@ -21,7 +30,7 @@ public class ProductDao extends AGenericDao<Product> implements IProductDao{
 		}
 		return listProducts;
 	}
-	
+
 	public List<Product> findByAttributes(String Attribute) {
 		List<Product> listProducts = new ArrayList<>();
 		for (Product product : getAll()) {

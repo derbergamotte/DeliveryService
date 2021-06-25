@@ -13,19 +13,27 @@ import com.ak.ds.entities.Client;
 import com.ak.ds.services.interfaces.IClientService;
 
 public class ClientService implements IClientService {
+	
+	private ClientService() {
+	}
+	
+	private static ClientService clientService;
+	
+	public static ClientService getClientService() {
+		if (clientService == null) {
+			clientService = new ClientService();
+		}
+		return clientService;
+	}
 
-	private IClientDao clientDao = new ClientDao();
+	private IClientDao clientDao = ClientDao.getClientDao();
 
 	public void addClient(ClientDto clientDto) {
 		clientDao.add(ClientMapper.dtoToEntity(clientDto));
 	}
 
 	public void addClient(String name, String adress, String phone) {
-		Client client = new Client();
-		client.setName(name);
-		client.setAdress(adress);
-		client.setPhone(phone);
-		clientDao.add(client);
+		clientDao.add(new Client(name, phone, adress));
 	}
 
 	public ClientDto getClientById(Long id) {

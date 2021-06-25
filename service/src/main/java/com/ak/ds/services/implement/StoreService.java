@@ -14,8 +14,20 @@ import com.ak.ds.entities.Store;
 import com.ak.ds.services.interfaces.IStoreService;
 
 public class StoreService implements IStoreService {
+	
+	private StoreService() {
+	}
+	
+	private static StoreService storeService;
+	
+	public static StoreService getStoreService() {
+		if (storeService == null) {
+			storeService = new StoreService();
+		}
+		return storeService;
+	}
 
-	private IStoreDao storeDao = new StoreDao();
+	private IStoreDao storeDao = StoreDao.getStoreDao();
 
 	public void addStore(StoreDto storeDto) {
 		Store store = StoreMapper.dtoToEntity(storeDto);
@@ -24,12 +36,7 @@ public class StoreService implements IStoreService {
 	}
 
 	public void addStore(String name, String adress, String phone) {
-		Store store = new Store();
-		store.setName(name);
-		store.setAdress(adress);
-		store.setPhone(phone);
-		store.setStoragesId(new ArrayList<Long>());
-		storeDao.add(store);
+		storeDao.add(new Store(name, phone, adress, new ArrayList<Long>()));
 	}
 
 	public StoreDto getStoreById(Long id) {
@@ -65,8 +72,12 @@ public class StoreService implements IStoreService {
 	}
 
 	public void addStorageInStore(Long storageId, Long storeId) {
-		Store store = storeDao.get(storeId);
-		store.getStoragesId().add(storageId);
-		storeDao.update(store);
+		try {
+			Store store = storeDao.get(storeId);
+			store.getStoragesId().add(storageId);
+			storeDao.update(store);
+		} catch (NullPointerException e) {
+			System.out.println("There isn't that store");
+		}
 	}
 }

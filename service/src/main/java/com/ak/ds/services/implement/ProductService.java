@@ -15,10 +15,22 @@ import com.ak.ds.services.interfaces.ICategoryService;
 import com.ak.ds.services.interfaces.IProductService;
 
 public class ProductService implements IProductService {
+	
+	private ProductService() {
+	}
+	
+	private static ProductService productService;
+	
+	public static ProductService getProductService() {
+		if (productService == null) {
+			productService = new ProductService();
+		}
+		return productService;
+	}
 
-	private IProductDao productDao = new ProductDao();
+	private IProductDao productDao = ProductDao.getProductDao();
 
-	private ICategoryService categoryService = new CategoryService();
+	private ICategoryService categoryService = CategoryService.getCategoryService();
 
 	public void addProduct(ProductDto productDto) {
 		Product product = ProductMapper.dtoToEntity(productDto);
@@ -28,12 +40,7 @@ public class ProductService implements IProductService {
 	}
 	
 	public void addProduct(String name, List<Long> categories, List<String> attributes, String information) {
-		Product product = new Product();
-		product.setName(name);
-		product.setCategoriesId(categories);
-		product.setAttributes(attributes);
-		product.setInformation(information);
-		product.setStoragesId(new ArrayList<Long>());
+		Product product = new Product(name, categories, new ArrayList<Long>(), attributes, information);
 		product = productDao.add(product);
 		categoryService.addProductInCategory(product.getCategoriesId(), product.getId());
 	}
@@ -73,22 +80,8 @@ public class ProductService implements IProductService {
 			product.getStoragesId().add(storageId);
 			productDao.update(product);
 		} catch (NullPointerException e) {
-			System.out.println("There isn't that storage");
+			System.out.println("There isn't that product");
 		}
-	}
-
-	public void addCategoryInProduct(ProductDto productDto, Long idCategory) {
-		if (productDto.getCategoriesId() == null) {
-			productDto.setCategoriesId(new ArrayList<Long>());
-		}
-		productDto.getCategoriesId().add(idCategory);
-	}
-
-	public void addAttributeInProduct(ProductDto productDto, String attribute) {
-		if (productDto.getAttributes() == null) {
-			productDto.setAttributes(new ArrayList<String>());
-		}
-		productDto.getAttributes().add(attribute);
 	}
 
 	public List<ProductDto> getProductsByCategoryById(Long categoryId) {

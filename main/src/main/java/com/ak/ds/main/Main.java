@@ -8,13 +8,14 @@ import com.ak.ds.api.dto.ProductDto;
 import com.ak.ds.api.dto.StorageDto;
 import com.ak.ds.api.dto.StoreDto;
 import com.ak.ds.ui.IUserInterface;
-import com.ak.ds.ui.UserInterface;
+import com.ak.ds.ui.IUserInterfaceFactory;
+import com.ak.ds.ui.UserInterfaceFactory;
 
 /**
  * @author Aleh Kuruta
  * Directory is "e://json". It can be changed in "dao/util/DirectoryControl"
  * Entities get ID automatically that's why I delete another objects.
- * Because next time then you start "something goes wrong". Old objects was deleted and new will get new ID.
+ * Because next time then you start "something will have gone wrong". Old objects was deleted and new will get new ID.
  */
 public class Main {
 	
@@ -23,7 +24,9 @@ public class Main {
 		//Create some object
 		UtilClassForCreateSomeEntities.create();
 		
-		IUserInterface userInterface = new UserInterface();
+		IUserInterfaceFactory userInterfaceFactory = new UserInterfaceFactory();
+		
+		IUserInterface userInterface = userInterfaceFactory.createUserInterface();
 		
 		System.out.println("Create client");
 		userInterface.addClient("Gosha", "Zavadskogo", "777-33-12");
@@ -36,7 +39,7 @@ public class Main {
 		System.out.println(userInterface.getClient(3L));
 		
 		System.out.println("Create store");
-		userInterface.addStore("The Best store in the world", "Serepukhova", "714-21-99");
+		userInterface.addStore("The Best store in the world", "Serpukhova", "714-21-99");
 		System.out.println(userInterface.getStore(3L));
 		
 		System.out.println("Now update");
@@ -86,17 +89,17 @@ public class Main {
 		userInterface.createOrder(3L, 3L, 3L, 1);
 		System.out.println(userInterface.getOrder(1L));
 		
-		System.out.println(userInterface.getClient(1L));
+		System.out.println(userInterface.getClient(3L));
 		System.out.println("Delete client");
-		userInterface.removeClient(1L);
-		System.out.println(userInterface.getClient(1L));
-		System.out.println(userInterface.getProduct(1L));
+		userInterface.removeClient(3L);
+		System.out.println(userInterface.getClient(3L));
+		System.out.println(userInterface.getProduct(3L));
 		System.out.println("Delete product");
-		userInterface.removeProduct(1L);
-		System.out.println(userInterface.getProduct(1L));
-		System.out.println(userInterface.getProduct(1L));
+		userInterface.removeProduct(3L);
+		System.out.println(userInterface.getProduct(3L));
+		System.out.println(userInterface.getStore(3L));
 		System.out.println("Delete store");
-		userInterface.removeStore(1L);
-		System.out.println(userInterface.getProduct(1L));
+		userInterface.removeStore(3L);
+		System.out.println(userInterface.getStore(3L));
 	}
 }

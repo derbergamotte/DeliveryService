@@ -60,5 +60,6 @@ public interface IUserInterface {
 	void createOrder(Long clientId, Long StoreId, Long productId, Integer quantity);
 
 	OrderDto getOrder(Long id);
-
+	
+	public void addCategory(String categoryName);
 }

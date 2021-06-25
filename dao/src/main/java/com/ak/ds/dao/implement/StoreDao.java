@@ -5,7 +5,16 @@ import com.ak.ds.entities.Store;
 
 public class StoreDao extends AGenericDao<Store> implements IStoreDao{
 	
-	public StoreDao() {
+	private StoreDao() {
 		super(Store.class);
+	}
+	
+	private static StoreDao storeDao;
+	
+	public static StoreDao getStoreDao() {
+		if (storeDao == null) {
+			storeDao = new StoreDao();
+		}
+		return storeDao;
 	}
 }

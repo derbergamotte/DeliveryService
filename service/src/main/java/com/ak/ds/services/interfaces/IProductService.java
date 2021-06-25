@@ -13,8 +13,6 @@ public interface IProductService {
 	public void removeProduct(Long orderId);
 	public void updateProduct(ProductDto productDto);
 	public void addProductInStorage(Long storageId, Long productId);
-	public void addCategoryInProduct(ProductDto productDto, Long idCategory);
-	public void addAttributeInProduct(ProductDto productDto, String attribute);
 	public List<ProductDto> getProductsByCategoryById(Long categoryId);
 	public List<ProductDto> findByAttributes(List<String> listAttributes);
 	public List<ProductDto> findByAttributes(String attribute);

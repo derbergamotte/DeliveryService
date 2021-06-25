@@ -5,8 +5,16 @@ import com.ak.ds.entities.Order;
 
 public class OrderDao extends AGenericDao<Order> implements IOrderDao{
 	
-	public OrderDao() {
+	private OrderDao() {
 		super(Order.class);
 	}
 
+	private static OrderDao orderDao;
+
+	public static OrderDao getOrderDao() {
+		if (orderDao == null) {
+			orderDao = new OrderDao();
+		}
+		return orderDao;
+	}
 }
