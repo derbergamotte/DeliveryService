@@ -11,15 +11,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Storage extends AEntity{
-	
-	private Store store;
-	private Product product;
-	private Integer quantity;
-	private Integer price;
-	private Collection<Order> orders;
+public class Attribute extends AEntity{
 
-	public Storage(Storage storage) {
-		this.id = storage.id;
+	private String name;
+	private Collection<Product> products;
+	
+	public Attribute(Attribute attribute) {
+		this.id = attribute.id;
 	}
 }

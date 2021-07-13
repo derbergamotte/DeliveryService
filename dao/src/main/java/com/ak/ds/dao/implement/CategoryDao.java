@@ -11,7 +11,7 @@ public class CategoryDao extends AGenericDao<Category> implements ICategoryDao{
 	
 	private static CategoryDao categoryDao;
 	
-	public static CategoryDao getCategoryDao() {
+	public static ICategoryDao getCategoryDao() {
 		if (categoryDao == null) {
 			categoryDao = new CategoryDao();
 		}

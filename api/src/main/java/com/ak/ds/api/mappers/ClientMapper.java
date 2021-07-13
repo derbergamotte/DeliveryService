@@ -1,7 +1,7 @@
 package com.ak.ds.api.mappers;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.ak.ds.api.dto.ClientDto;
 import com.ak.ds.entities.Client;
@@ -28,8 +28,8 @@ public class ClientMapper {
 		return entity;
 	}
 
-	public static List<ClientDto> convertList(List<Client> entities){
-		List<ClientDto> listDto = new ArrayList<>();
+	public static Collection<ClientDto> convertList(Collection<Client> entities){
+		Collection<ClientDto> listDto = new ArrayList<>();
 		for(Client entity : entities) {
 			ClientDto dto = entityToDto(entity);
 			listDto.add(dto);

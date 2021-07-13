@@ -9,7 +9,10 @@ import java.nio.file.Paths;
 
 public class DirectoryControl {
 	
-	final private static String PATH = "e:\\json\\";
+	private DirectoryControl() {
+	}
+	
+	final private static String PATH = "..\\json\\";
 	
 	public static String getPath(String className) { 
 		String stringPath = PATH + className +"\\";
@@ -36,5 +39,4 @@ public class DirectoryControl {
 			}
 		}
 	}
-
 }

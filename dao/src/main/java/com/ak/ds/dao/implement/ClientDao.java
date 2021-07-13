@@ -11,7 +11,7 @@ public class ClientDao extends AGenericDao<Client> implements IClientDao{
 	
 	private static ClientDao clientDao;
 	
-	public static ClientDao getClientDao() {
+	public static IClientDao getClientDao() {
 		if (clientDao == null) {
 			clientDao = new ClientDao();
 		}

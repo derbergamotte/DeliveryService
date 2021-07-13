@@ -1,6 +1,6 @@
 package com.ak.ds.entities;
 
-import java.util.List;
+import java.util.Collection;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,5 +16,9 @@ public class Store extends AEntity{
 	private String name;
 	private String phone;
 	private String adress;
-	private List<Long> storagesId;
+	private Collection<Storage> storages;
+	
+	public Store(Store store) {
+		this.id = store.id;
+	}
 }

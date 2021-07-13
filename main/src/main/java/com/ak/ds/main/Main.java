@@ -1,6 +1,7 @@
 package com.ak.ds.main;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.ak.ds.api.dto.ClientDto;
@@ -21,7 +22,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		//Create some object
+		//Create some objects
 		UtilClassForCreateSomeEntities.create();
 		
 		IUserInterfaceFactory userInterfaceFactory = new UserInterfaceFactory();
@@ -51,7 +52,7 @@ public class Main {
 		System.out.println("Create product");
 		List<Long> categories = new ArrayList<>();
 		categories.add(1L);
-		List<String> attributes = new ArrayList<>();
+		Collection<String> attributes = new ArrayList<>();
 		attributes.add("Halloween");
 		attributes.add("Yellow");
 		userInterface.addProduct("Pumpkin", categories, attributes, "Just pumpkin");
@@ -65,12 +66,17 @@ public class Main {
 		System.out.println("Let's peek that in the second category");
 		System.out.println(userInterface.getAllProductesInCategory(2L));
 		System.out.println("And find something by attributes");
-		System.out.println(userInterface.findProductesbyAttributes(attributes));
+		
+		Collection<Long> attributesId = new ArrayList<>();
+		attributesId.add(1L);
+		attributesId.add(2L);
+		System.out.println(userInterface.findProductesbyAttributes(attributesId));
 		System.out.println("or attribute");
-		System.out.println(userInterface.findProductesbyAttributes("Yellow"));
+		System.out.println(userInterface.findProductesbyAttributes(3L));
 		
 		System.out.println("Let's put pumpkin in some stores");
 		userInterface.putProductInStore(1L, 3L, 120, 1200);
+		System.out.println("check");
 		System.out.println(userInterface.getStorage(1L));
 		userInterface.putProductInStore(2L, 3L, 80, 1030);
 		System.out.println(userInterface.getStorage(2L));

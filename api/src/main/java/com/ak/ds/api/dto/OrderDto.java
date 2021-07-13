@@ -7,11 +7,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class OrderDto extends ADto{
 	
-	private Long storeId;
-	private StoreDto store;
+	private Long storageId;
+	private StorageDto storage;
 	private Long clientId;
 	private ClientDto client;
-	private Long productId;
-	private ProductDto product;
 	private Integer quantity;
 }

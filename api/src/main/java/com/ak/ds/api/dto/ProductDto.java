@@ -1,6 +1,6 @@
 package com.ak.ds.api.dto;
 
-import java.util.List;
+import java.util.Collection;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,9 +10,8 @@ import lombok.EqualsAndHashCode;
 public class ProductDto extends ADto{
 	
 	private String name;
-	private List<Long> categoriesId;
-	private List<Long> storagesId;
-	private List<StorageDto> storages;
-	private List<String> attributes;
+	private Collection<Long> categoriesId;
+	private Collection<Long> storagesId;
+	private Collection<Long> attributesId;
 	private String information;
 }

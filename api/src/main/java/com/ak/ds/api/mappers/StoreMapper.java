@@ -1,7 +1,7 @@
 package com.ak.ds.api.mappers;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.ak.ds.api.dto.StoreDto;
 import com.ak.ds.entities.Store;
@@ -16,7 +16,7 @@ public class StoreMapper {
 		dto.setName(entity.getName());
 		dto.setAdress(entity.getAdress());
 		dto.setPhone(entity.getPhone());
-		dto.setStoragesId(entity.getStoragesId());
+//		dto.setStorages(StorageMapper.convertList(entity.getStorages()));
 		return dto;
 	}
 
@@ -26,12 +26,12 @@ public class StoreMapper {
 		entity.setName(dto.getName());
 		entity.setAdress(dto.getAdress());
 		entity.setPhone(dto.getPhone());
-		entity.setStoragesId(dto.getStoragesId());
+//		entity.setStorages(StorageMapper.convertListDtoToEntity(dto.getStorages()));
 		return entity;
 	}
 	
-	public static List<StoreDto> convertList(List<Store> entities){
-		List<StoreDto> listDto = new ArrayList<>();
+	public static Collection<StoreDto> convertList(Collection<Store> entities){
+		Collection<StoreDto> listDto = new ArrayList<>();
 		for(Store entity : entities) {
 			StoreDto dto = entityToDto(entity);
 			listDto.add(dto);

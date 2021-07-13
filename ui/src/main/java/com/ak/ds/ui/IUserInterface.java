@@ -1,6 +1,6 @@
 package com.ak.ds.ui;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.ak.ds.api.dto.CategoryDto;
 import com.ak.ds.api.dto.ClientDto;
@@ -15,7 +15,7 @@ public interface IUserInterface {
 
 	ClientDto getClient(Long id);
 
-	List<ClientDto> getAllClients();
+	Collection<ClientDto> getAllClients();
 
 	void updateClient(ClientDto clientDto);
 
@@ -25,23 +25,23 @@ public interface IUserInterface {
 
 	StoreDto getStore(Long id);
 
-	List<StoreDto> getAllStores();
+	Collection<StoreDto> getAllStores();
 
 	void updateStore(StoreDto storeDto);
 
 	void removeStore(Long id);
 
-	void addProduct(String name, List<Long> categories, List<String> attributes, String information);
+	public void addProduct(String name, Collection<Long> categoriesId, Collection<String> attributes, String information);
 
 	ProductDto getProduct(Long id);
 
-	List<ProductDto> getAllProductes();
+	Collection<ProductDto> getAllProductes();
 
-	List<ProductDto> getAllProductesInCategory(Long id);
+	Collection<ProductDto> getAllProductesInCategory(Long id);
 
-	List<ProductDto> findProductesbyAttributes(List<String> listAttributes);
+	Collection<ProductDto> findProductesbyAttributes(Collection<Long> listAttributes);
 
-	List<ProductDto> findProductesbyAttributes(String attribute);
+	Collection<ProductDto> findProductesbyAttributes(Long attribute);
 
 	void updateProduct(ProductDto productDto);
 
@@ -53,9 +53,9 @@ public interface IUserInterface {
 
 	void updateStorage(StorageDto storageDto);
 
-	List<StorageDto> sortProductByPrice(Long id);
+	Collection<StorageDto> sortProductByPrice(Long id);
 
-	List<CategoryDto> getAllCategories();
+	Collection<CategoryDto> getAllCategories();
 
 	void createOrder(Long clientId, Long StoreId, Long productId, Integer quantity);
 

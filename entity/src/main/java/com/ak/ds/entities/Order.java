@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Order extends AEntity{
 	
-	private Long storeId;
-	private Long clientId;
-	private Long productId;
+	private Storage storage;
+	private Client client;
 	private Integer quantity;
+	
+	public Order(Order order) {
+		this.id = order.id;
+	}
 }

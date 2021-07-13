@@ -1,16 +1,25 @@
 package com.ak.ds.services.implement;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.ak.ds.api.dto.ProductDto;
 import com.ak.ds.api.mappers.ProductMapper;
-import com.ak.ds.dao.implement.ProductDao;
+import com.ak.ds.dao.factory.DaoFactory;
+import com.ak.ds.dao.factory.IDaoFactory;
 import com.ak.ds.dao.interfaces.IProductDao;
+import com.ak.ds.entities.Attribute;
+import com.ak.ds.entities.Category;
 import com.ak.ds.entities.Product;
+import com.ak.ds.entities.Storage;
+import com.ak.ds.services.factories.IServiceFactory;
+import com.ak.ds.services.factories.ServiceFactory;
+import com.ak.ds.services.interfaces.IAttributeService;
 import com.ak.ds.services.interfaces.ICategoryService;
 import com.ak.ds.services.interfaces.IProductService;
 
@@ -28,32 +37,35 @@ public class ProductService implements IProductService {
 		return productService;
 	}
 
-	private IProductDao productDao = ProductDao.getProductDao();
+	private IDaoFactory daoFactory = new DaoFactory();
+	private IProductDao productDao = daoFactory.getProductDao();
 
-	private ICategoryService categoryService = CategoryService.getCategoryService();
-
+	private IServiceFactory serviceFactory = new ServiceFactory();
+	private IAttributeService attributeService = serviceFactory.getAttributeService();
+	private ICategoryService categoryService = serviceFactory.getCategoryService();
+	
 	public void addProduct(ProductDto productDto) {
 		Product product = ProductMapper.dtoToEntity(productDto);
-		product.setStoragesId(new ArrayList<Long>());
+		product.setStorages(new ArrayList<Storage>());
 		product = productDao.add(product);
-		categoryService.addProductInCategory(product.getCategoriesId(), product.getId());
 	}
 	
-	public void addProduct(String name, List<Long> categories, List<String> attributes, String information) {
-		Product product = new Product(name, categories, new ArrayList<Long>(), attributes, information);
+	public void addProduct(String name, Collection<Long> categoriesId, Collection<String> attributeNames, String information) {
+		Collection<Attribute> attributes = attributeNames.stream().map(a -> attributeService.addAttribute(a)).collect(Collectors.toSet());
+		Collection<Category> categories = categoriesId.stream().map(c-> categoryService.getCategoryEntityById(c)).collect(Collectors.toSet());
+		Product product = new Product(name, categories, new ArrayList<Storage>(), attributes, information);
 		product = productDao.add(product);
-		categoryService.addProductInCategory(product.getCategoriesId(), product.getId());
 	}
 
 	public ProductDto getProductById(Long id) {
-		return ProductMapper.entityToDto(getProductEntity(id));
+		return ProductMapper.entityToDto(getProductEntityById(id));
 	}
 
-	private Product getProductEntity(Long id) {
+	public Product getProductEntityById(Long id) {
 		return Optional.ofNullable(Optional.ofNullable(this.productDao.get(id)).orElse(new Product())).get();
 	}
 
-	public List<ProductDto> getAll() {
+	public Collection<ProductDto> getAll() {
 		return ProductMapper.convertList(productDao.getAll());
 	}
 
@@ -63,7 +75,7 @@ public class ProductService implements IProductService {
 
 	public void updateProduct(ProductDto productDto) {
 		if (!(productDto.getId() == null)) {
-			Product product = getProductEntity(productDto.getId());
+			Product product = getProductEntityById(productDto.getId());
 			if (StringUtils.isNotEmpty(productDto.getName())) {
 				product.setName(productDto.getName());
 			}
@@ -74,29 +86,19 @@ public class ProductService implements IProductService {
 		}
 	}
 
-	public void addProductInStorage(Long storageId, Long productId) {
-		Product product = getProductEntity(productId);
-		try {
-			product.getStoragesId().add(storageId);
-			productDao.update(product);
-		} catch (NullPointerException e) {
-			System.out.println("There isn't that product");
-		}
-	}
-
-	public List<ProductDto> getProductsByCategoryById(Long categoryId) {
-		List<ProductDto> listProduct = new ArrayList<>();
-		for (Long productId : categoryService.getCategoryById(categoryId).getProductsId()) {
-			listProduct.add(getProductById(productId));
-		}
+	public Collection<ProductDto> getProductsByCategoryById(Long categoryId) {
+		Collection<Long> listProductId = categoryService.getCategoryById(categoryId).getProductsId();
+		Collection<ProductDto> listProduct = listProductId.stream().map(c-> getProductById(c)).collect(Collectors.toSet());
 		return listProduct;
 	}
 
-	public List<ProductDto> findByAttributes(List<String> listAttributes) {
-		return ProductMapper.convertList(productDao.findByAttributes(listAttributes));
+	public Collection<ProductDto> findByAttributes(Collection<Long> listAttributesId) {
+		return ProductMapper.convertList(productDao.findByAttributes(listAttributesId));
 	}
 
-	public List<ProductDto> findByAttributes(String attribute) {
-		return ProductMapper.convertList(productDao.findByAttributes(attribute));
+	public Collection<ProductDto> findByAttributes(Long attributeId) {
+		Collection<Long> listAttributesId = new HashSet<>();
+		listAttributesId.add(attributeId);
+		return ProductMapper.convertList(productDao.findByAttributes(listAttributesId));
 	}
 }

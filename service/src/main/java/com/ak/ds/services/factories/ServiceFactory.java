@@ -1,41 +1,54 @@
 package com.ak.ds.services.factories;
 
+import com.ak.ds.services.implement.AttributeService;
 import com.ak.ds.services.implement.CategoryService;
 import com.ak.ds.services.implement.ClientService;
 import com.ak.ds.services.implement.OrderService;
 import com.ak.ds.services.implement.ProductService;
 import com.ak.ds.services.implement.StorageService;
 import com.ak.ds.services.implement.StoreService;
+import com.ak.ds.services.interfaces.IAttributeService;
+import com.ak.ds.services.interfaces.ICategoryService;
+import com.ak.ds.services.interfaces.IClientService;
+import com.ak.ds.services.interfaces.IOrderService;
+import com.ak.ds.services.interfaces.IProductService;
+import com.ak.ds.services.interfaces.IStorageService;
+import com.ak.ds.services.interfaces.IStoreService;
 
 public class ServiceFactory implements IServiceFactory {
 	
 	@Override
-	public CategoryService getCategoryService() {
+	public IAttributeService getAttributeService() {
+		return AttributeService.getAttributeService();
+	}
+	
+	@Override
+	public ICategoryService getCategoryService() {
 		return CategoryService.getCategoryService();
 	}
 
 	@Override
-	public ClientService getClientService() {
+	public IClientService getClientService() {
 		return ClientService.getClientService();
 	}
 	
 	@Override
-	public OrderService getOrderService() {
+	public IOrderService getOrderService() {
 		return OrderService.getOrderService();
 	}
 	
 	@Override
-	public ProductService getProductService() {
+	public IProductService getProductService() {
 		return ProductService.getProductService();
 	}
 	
 	@Override
-	public StorageService getStorageService() {
+	public IStorageService getStorageService() {
 		return StorageService.getStorageService();
 	}
 	
 	@Override
-	public StoreService getStoreService() {
+	public IStoreService getStoreService() {
 		return StoreService.getStoreService();
 	}
 }

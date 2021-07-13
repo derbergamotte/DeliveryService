@@ -1,15 +1,18 @@
 package com.ak.ds.services.implement;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.ak.ds.api.dto.ClientDto;
 import com.ak.ds.api.mappers.ClientMapper;
-import com.ak.ds.dao.implement.ClientDao;
+import com.ak.ds.dao.factory.DaoFactory;
+import com.ak.ds.dao.factory.IDaoFactory;
 import com.ak.ds.dao.interfaces.IClientDao;
 import com.ak.ds.entities.Client;
+import com.ak.ds.entities.Order;
 import com.ak.ds.services.interfaces.IClientService;
 
 public class ClientService implements IClientService {
@@ -26,25 +29,26 @@ public class ClientService implements IClientService {
 		return clientService;
 	}
 
-	private IClientDao clientDao = ClientDao.getClientDao();
+	private IDaoFactory daoFactory = new DaoFactory();
+	private IClientDao clientDao = daoFactory.getClientDao();
 
 	public void addClient(ClientDto clientDto) {
 		clientDao.add(ClientMapper.dtoToEntity(clientDto));
 	}
 
 	public void addClient(String name, String adress, String phone) {
-		clientDao.add(new Client(name, phone, adress));
+		clientDao.add(new Client(name, phone, adress, new HashSet<Order>()));
 	}
 
 	public ClientDto getClientById(Long id) {
-		return ClientMapper.entityToDto(getClientEntity(id));
+		return ClientMapper.entityToDto(getClientEntityById(id));
 	}
 
-	private Client getClientEntity(Long id) {
+	public Client getClientEntityById(Long id) {
 		return Optional.ofNullable(Optional.ofNullable(this.clientDao.get(id)).orElse(new Client())).get();
 	}
 
-	public List<ClientDto> getAll() {
+	public Collection<ClientDto> getAll() {
 		return ClientMapper.convertList(clientDao.getAll());
 	}
 
@@ -54,7 +58,7 @@ public class ClientService implements IClientService {
 
 	public void updateClient(ClientDto clientDto) {
 		if (!(clientDto.getId() == null)) {
-			Client client = getClientEntity(clientDto.getId());
+			Client client = getClientEntityById(clientDto.getId());
 			if (StringUtils.isNotEmpty(clientDto.getName())) {
 				client.setName(clientDto.getName());
 			}

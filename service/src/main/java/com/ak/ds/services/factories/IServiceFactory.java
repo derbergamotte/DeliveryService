@@ -1,24 +1,20 @@
 package com.ak.ds.services.factories;
 
-import com.ak.ds.services.implement.CategoryService;
-import com.ak.ds.services.implement.ClientService;
-import com.ak.ds.services.implement.OrderService;
-import com.ak.ds.services.implement.ProductService;
-import com.ak.ds.services.implement.StorageService;
-import com.ak.ds.services.implement.StoreService;
+import com.ak.ds.services.interfaces.IAttributeService;
+import com.ak.ds.services.interfaces.ICategoryService;
+import com.ak.ds.services.interfaces.IClientService;
+import com.ak.ds.services.interfaces.IOrderService;
+import com.ak.ds.services.interfaces.IProductService;
+import com.ak.ds.services.interfaces.IStorageService;
+import com.ak.ds.services.interfaces.IStoreService;
 
 public interface IServiceFactory {
 
-	CategoryService getCategoryService();
-
-	ClientService getClientService();
-
-	OrderService getOrderService();
-
-	ProductService getProductService();
-
-	StorageService getStorageService();
-
-	StoreService getStoreService();
-
+	IAttributeService getAttributeService();
+	ICategoryService getCategoryService();
+	IClientService getClientService();
+	IOrderService getOrderService();
+	IProductService getProductService();
+	IStorageService getStorageService();
+	IStoreService getStoreService();
 }

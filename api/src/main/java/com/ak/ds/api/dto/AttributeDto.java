@@ -1,13 +1,14 @@
 package com.ak.ds.api.dto;
 
+import java.util.Collection;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class StoreDto extends ADto{
+public class AttributeDto extends ADto{
 	
 	private String name;
-	private String phone;
-	private String adress;
+	private Collection<Long> productsId;
 }

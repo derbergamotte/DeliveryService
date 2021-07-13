@@ -1,6 +1,6 @@
 package com.ak.ds.entities;
 
-import java.util.Set;
+import java.util.Collection;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +14,9 @@ import lombok.NoArgsConstructor;
 public class Category extends AEntity{
 	
 	private String name;
-	private Set<Long> productsId;
+	private Collection<Product> products;
+	
+	public Category(Category category){
+		this.id = category.id;
+	}
 }

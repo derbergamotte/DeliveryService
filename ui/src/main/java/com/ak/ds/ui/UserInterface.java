@@ -1,6 +1,6 @@
 package com.ak.ds.ui;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.ak.ds.api.dto.CategoryDto;
 import com.ak.ds.api.dto.ClientDto;
@@ -32,17 +32,11 @@ public class UserInterface implements IUserInterface {
 	}
 	
 	private IServiceFactory serviceFactory  = new ServiceFactory ();
-	
 	private ICategoryService categoryService = serviceFactory.getCategoryService();
-	
 	private IStoreService storeService = serviceFactory.getStoreService();
-	
 	private IProductService productService = serviceFactory.getProductService();
-	
 	private IClientService clientService = serviceFactory.getClientService();
-	
 	private IStorageService storageService = serviceFactory.getStorageService();
-	
 	private IOrderService orderService = serviceFactory.getOrderService();
 	
 	public void addClient(String name, String adress, String phone) {
@@ -53,7 +47,7 @@ public class UserInterface implements IUserInterface {
 		return clientService.getClientById(id);
 	}
 	
-	public List<ClientDto> getAllClients() {
+	public Collection<ClientDto> getAllClients() {
 		return clientService.getAll();
 	}
 	
@@ -73,7 +67,7 @@ public class UserInterface implements IUserInterface {
 		return storeService.getStoreById(id);
 	}
 	
-	public List<StoreDto> getAllStores() {
+	public Collection<StoreDto> getAllStores() {
 		return storeService.getAll();
 	}
 	
@@ -85,27 +79,27 @@ public class UserInterface implements IUserInterface {
 		storeService.removeStore(id);
 	}
 	
-	public void addProduct(String name, List<Long> categories, List<String> attributes, String information) {
-		productService.addProduct(name, categories, attributes, information);
+	public void addProduct(String name, Collection<Long> categoriesId, Collection<String> attributes, String information) {
+		productService.addProduct(name, categoriesId, attributes, information);
 	}
 	
 	public ProductDto getProduct(Long id) {
 		return productService.getProductById(id);
 	}
 	
-	public List<ProductDto> getAllProductes() {
+	public Collection<ProductDto> getAllProductes() {
 		return productService.getAll();
 	}
 	
-	public List<ProductDto> getAllProductesInCategory(Long id) {
+	public Collection<ProductDto> getAllProductesInCategory(Long id) {
 		return productService.getProductsByCategoryById(id);
 	}
 	
-	public List<ProductDto> findProductesbyAttributes(List<String> listAttributes) {
+	public Collection<ProductDto> findProductesbyAttributes(Collection<Long> listAttributes) {
 		return productService.findByAttributes(listAttributes);
 	}
 	
-	public List<ProductDto> findProductesbyAttributes(String attribute) {
+	public Collection<ProductDto> findProductesbyAttributes(Long attribute) {
 		return productService.findByAttributes(attribute);
 	}
 	
@@ -122,23 +116,23 @@ public class UserInterface implements IUserInterface {
 	}
 	
 	public StorageDto getStorage (Long id) {
-		return storageService.getHeavyStorageById(id);
+		return storageService.getStorageById(id);
 	}
 	
 	public void updateStorage (StorageDto storageDto) {
 		storageService.updateStorage(storageDto);
 	}
 	
-	public List<StorageDto> sortProductByPrice (Long id) {
+	public Collection<StorageDto> sortProductByPrice (Long id) {
 		return storageService.sortProductByPriceInStores(id);
 	}
 	
-	public List<CategoryDto> getAllCategories() {
+	public Collection<CategoryDto> getAllCategories() {
 		return categoryService.getAll();
 	}
 	
-	public void createOrder(Long clientId, Long StoreId, Long productId, Integer quantity) {
-		orderService.addOrder(clientId, StoreId, productId, quantity);
+	public void createOrder(Long clientId, Long storeId, Long productId, Integer quantity) {
+		orderService.addOrder(clientId, storeId, productId, quantity);
 	}
 	
 	public OrderDto getOrder(Long id) {

@@ -1,11 +1,10 @@
 package com.ak.ds.dao.interfaces;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.ak.ds.entities.Product;
 
 public interface IProductDao extends IAGenericDao<Product>{
 
-	public List<Product> findByAttributes(List<String> listAttributes);
-	public List<Product> findByAttributes(String attribute);
+	Collection<Product> findByAttributes(Collection<Long> listAttributesId);
 }

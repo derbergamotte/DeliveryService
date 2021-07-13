@@ -1,15 +1,21 @@
 package com.ak.ds.services.implement;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.ak.ds.api.dto.StorageDto;
 import com.ak.ds.api.mappers.StorageMapper;
-import com.ak.ds.dao.implement.StorageDao;
+import com.ak.ds.dao.factory.DaoFactory;
+import com.ak.ds.dao.factory.IDaoFactory;
 import com.ak.ds.dao.interfaces.IStorageDao;
+import com.ak.ds.entities.Order;
+import com.ak.ds.entities.Product;
 import com.ak.ds.entities.Storage;
+import com.ak.ds.entities.Store;
 import com.ak.ds.services.factories.IServiceFactory;
 import com.ak.ds.services.factories.ServiceFactory;
 import com.ak.ds.services.interfaces.IProductService;
@@ -30,49 +36,49 @@ public class StorageService implements IStorageService {
 		return storageService;
 	}
 
-	private IStorageDao storageDao = StorageDao.getStorageDao();
-
+	private IDaoFactory daoFactory = new DaoFactory();
+	private IStorageDao storageDao = daoFactory.getStorageDao();
 	private IServiceFactory serviceFactory = new ServiceFactory();
-
 	private IStoreService storeService = serviceFactory.getStoreService();
-
 	private IProductService productService = serviceFactory.getProductService();
 
 	public void addStorage(StorageDto storageDto) {
-		if (!(storeService.getStoreById(storageDto.getStoreId()).getId() == null
-				&& productService.getProductById(storageDto.getProductId()).getId() == null)) {
+		if (!(storeService.getStoreById(storageDto.getStoreId()) == null
+				&& productService.getProductById(storageDto.getProductId()) == null)) {
 			Storage storage = storageDao.add(StorageMapper.dtoToEntity(storageDto));
-			productService.addProductInStorage(storage.getId(), storage.getProductId());
-			storeService.addStorageInStore(storage.getId(), storage.getStoreId());
+			storage = storageDao.add(storage);
 		}
 	}
 
 	public void addStorage(Long storeId, Long productId, Integer price, Integer quantity) {
 		if (!(storeService.getStoreById(storeId).getId() == null
 				&& productService.getProductById(productId).getId() == null)) {
-			Storage storage = new Storage(storeId, productId, quantity, price);
+			Store store = storeService.getStoreEntityById(storeId);
+			Product product = productService.getProductEntityById(productId);
+			Storage storage = new Storage(store, product, quantity, price, new ArrayList<Order>());
 			storage = storageDao.add(storage);
-			productService.addProductInStorage(storage.getId(), storage.getProductId());
-			storeService.addStorageInStore(storage.getId(), storage.getStoreId());
 		}
 	}
 
 	public StorageDto getStorageById(Long id) {
-		return StorageMapper.entityToDto(getStorageEntity(id));
+		return StorageMapper.entityToDto(getStorageEntityById(id));
 	}
 
-	private Storage getStorageEntity(Long id) {
+	public Storage getStorageEntityByStoreAndProduct(Long storeId, Long productId) {
+		StorageDto storage = new StorageDto();
+		for(StorageDto itterator : getAll()) {
+			if(itterator.getStoreId().equals(storeId) && itterator.getProductId().equals(productId)) {
+				storage = itterator;
+			}
+		}
+		return StorageMapper.dtoToEntity(storage);
+	}
+	
+	public Storage getStorageEntityById(Long id) {
 		return Optional.ofNullable(Optional.ofNullable(this.storageDao.get(id)).orElse(new Storage())).get();
 	}
 
-	public StorageDto getHeavyStorageById(Long id) {
-		StorageDto storageDto = getStorageById(id);
-		storageDto.setStore(storeService.getStoreById(storageDto.getStoreId()));
-		storageDto.setProduct(productService.getProductById(storageDto.getProductId()));
-		return storageDto;
-	}
-
-	public List<StorageDto> getAll() {
+	public Collection<StorageDto> getAll() {
 		return StorageMapper.convertList(storageDao.getAll());
 	}
 
@@ -82,7 +88,7 @@ public class StorageService implements IStorageService {
 
 	public void updateStorage(StorageDto storageDto) {
 		if (!(storageDto.getId() == null)) {
-			Storage storage = getStorageEntity(storageDto.getId());
+			Storage storage = getStorageEntityById(storageDto.getId());
 			if (!(storageDto.getQuantity() == null)) {
 				storage.setQuantity(storageDto.getQuantity());
 			}
@@ -93,11 +99,12 @@ public class StorageService implements IStorageService {
 		}
 	}
 
-	public List<StorageDto> sortProductByPriceInStores(Long productId) {
+	public Collection<StorageDto> sortProductByPriceInStores(Long productId) {
 		List<StorageDto> listStorages = new ArrayList<>();
+		Collection<Long> storagesId = productService.getProductById(productId).getStoragesId();
 		try {
-			for (Long storageId : productService.getProductById(productId).getStoragesId()) {
-				listStorages.add(getHeavyStorageById(storageId));
+			for (StorageDto storage : storagesId.stream().map(s-> getStorageById(s)).collect(Collectors.toSet())) {
+				listStorages.add(getStorageById(storage.getId()));
 			}
 			listStorages.sort(Comparator.comparing(StorageDto::getPrice));
 		} catch (NullPointerException e) {
