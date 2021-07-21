@@ -1,6 +1,5 @@
 package implementation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -16,10 +15,10 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreDao storeDao = StoreDaoImpl.getStoreDao();
 
+    private static StoreServiceImpl storeService;
+
     private StoreServiceImpl() {
     }
-
-    private static StoreServiceImpl storeService;
 
     public static StoreServiceImpl getStoreService() {
         if (storeService == null) {
@@ -28,18 +27,12 @@ public class StoreServiceImpl implements StoreService {
         return storeService;
     }
 
-    public void add(StoreDto storeDto) {
-        Store store = StoreMapper.dtoToEntity(storeDto);
-        store.setStorages(new ArrayList<>());
-        storeDao.add(store);
-    }
-
-    public void add(String name, String adress, String phone) {
-        storeDao.add(new Store(name, phone, adress, new HashSet<>()));
+    public StoreDto add(StoreDto storeDto) {
+        return StoreMapper.INSTANCE.toDto(storeDao.add(StoreMapper.INSTANCE.toEntity(storeDto)));
     }
 
     public StoreDto getById(Long id) {
-        return StoreMapper.entityToDto(getEntityById(id));
+        return StoreMapper.INSTANCE.toDto(getEntityById(id));
     }
 
     public Store getEntityById(Long id) {
@@ -47,7 +40,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     public Collection<StoreDto> getAll() {
-        return StoreMapper.convertList(storeDao.getAll());
+        return StoreMapper.INSTANCE.toDto(storeDao.getAll());
     }
 
     public void remove(Long orderId) {

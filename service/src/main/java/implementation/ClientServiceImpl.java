@@ -1,7 +1,6 @@
 package implementation;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
 
 import dto.ClientDto;
@@ -28,16 +27,12 @@ public class ClientServiceImpl implements ClientService {
         return clientService;
     }
 
-    public void add(ClientDto clientDto) {
-        clientDao.add(ClientMapper.dtoToEntity(clientDto));
-    }
-
-    public void add(String name, String address, String phone) {
-        clientDao.add(new Client(name, phone, address, new HashSet<>()));
+    public ClientDto add(ClientDto clientDto) {
+       return ClientMapper.INSTANCE.toDto(clientDao.add(ClientMapper.INSTANCE.toEntity(clientDto)));
     }
 
     public ClientDto getById(Long id) {
-        return ClientMapper.entityToDto(getEntityById(id));
+        return ClientMapper.INSTANCE.toDto(getEntityById(id));
     }
 
     //TODO: Generate error
@@ -46,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public Collection<ClientDto> getAll() {
-        return ClientMapper.convertList(clientDao.getAll());
+        return ClientMapper.INSTANCE.toDto(clientDao.getAll());
     }
 
     public void remove(Long id) {

@@ -7,9 +7,7 @@ import java.util.Collection;
 
 public interface StoreService {
 
-    void add(StoreDto storeDto);
-
-    void add(String name, String adress, String phone);
+    StoreDto add(StoreDto storeDto);
 
     StoreDto getById(Long id);
 

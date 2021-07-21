@@ -1,15 +1,12 @@
 package interfaces;
 
 import dto.AttributeDto;
-import entities.Attribute;
 
 public interface AttributeService {
 
-    Attribute add(String attributeName);
+    AttributeDto add(AttributeDto attributeDto);
 
     AttributeDto getById(Long id);
 
-    //TODO: check
-    Attribute getEntityById(Long id);
-
+    AttributeDto getElseAdd(AttributeDto attributeDto);
 }

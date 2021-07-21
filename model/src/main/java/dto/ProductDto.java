@@ -10,8 +10,8 @@ import lombok.EqualsAndHashCode;
 public class ProductDto extends BaseDto {
 
     private String name;
-    private Collection<Long> categoriesId;
-    private Collection<Long> storagesId;
-    private Collection<Long> attributesId;
+    private Collection<CategoryDto> categories;
+    private Collection<StorageDto> storages;
+    private Collection<AttributeDto> attributes;
     private String information;
 }

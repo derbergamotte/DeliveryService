@@ -1,52 +1,22 @@
 package mappers;
 
 import dto.ProductDto;
-import entities.BaseEntity;
 import entities.Product;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
-public class ProductMapper {
+@Mapper
+public interface ProductMapper {
 
-    private ProductMapper() {
-    }
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    public static ProductDto entityToDto(Product entity) {
-        ProductDto dto = new ProductDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setCategoriesId(getIds(entity.getCategories()));
-        dto.setStoragesId(getIds(entity.getStorages()));
-        dto.setAttributesId(getIds(entity.getAttributes()));
-        dto.setInformation(entity.getInformation());
-        return dto;
-    }
+    @Mapping(source = "id", target = "id")
+    ProductDto toDto(Product entity);
 
-    public static Product dtoToEntity(ProductDto dto) {
-        Product entity = new Product();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setInformation(dto.getInformation());
-        return entity;
-    }
+    Collection<ProductDto> toDto(Collection<Product> products);
 
-    public static Collection<ProductDto> convertList(Collection<Product> entities) {
-        Collection<ProductDto> listDto = new ArrayList<>();
-        for (Product entity : entities) {
-            ProductDto dto = entityToDto(entity);
-            listDto.add(dto);
-        }
-        return listDto;
-    }
-
-    private static <T extends BaseEntity> Collection<Long> getIds(Collection<T> collection) {
-        Collection<Long> collectionId = null;
-        try {
-            collectionId = collection.stream().map(c -> c.getId()).collect(Collectors.toSet());
-        } catch (NullPointerException e) {
-        }
-        return collectionId;
-    }
+    Product toEntity(ProductDto dto);
 }

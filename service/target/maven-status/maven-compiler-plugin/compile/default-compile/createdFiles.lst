@@ -1,0 +1,14 @@
+implementation\CategoryServiceImpl.class
+implementation\ClientServiceImpl.class
+interfaces\OrderService.class
+interfaces\StorageService.class
+implementation\AttributeServiceImpl.class
+implementation\StorageServiceImpl.class
+interfaces\CategoryService.class
+interfaces\AttributeService.class
+interfaces\ProductService.class
+interfaces\StoreService.class
+implementation\StoreServiceImpl.class
+implementation\OrderServiceImpl.class
+implementation\ProductServiceImpl.class
+interfaces\ClientService.class

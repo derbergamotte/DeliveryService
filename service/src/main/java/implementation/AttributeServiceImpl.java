@@ -1,8 +1,5 @@
 package implementation;
 
-import java.util.HashSet;
-import java.util.Optional;
-
 import dto.AttributeDto;
 import entities.Attribute;
 import interfaces.AttributeDao;
@@ -13,10 +10,10 @@ public class AttributeServiceImpl implements AttributeService {
 
     private final AttributeDao attributeDao = AttributeDaoImpl.getAttributeDao();
 
+    private static AttributeService attributeService;
+
     private AttributeServiceImpl() {
     }
-
-    private static AttributeService attributeService;
 
     public static AttributeService getAttributeService() {
         if (attributeService == null) {
@@ -25,19 +22,25 @@ public class AttributeServiceImpl implements AttributeService {
         return attributeService;
     }
 
-    public Attribute add(String attributeName) {
-        Attribute attribute = attributeDao.getAttrbuteByName(attributeName);
-        if (attribute.getId() == null) {
-            attribute = attributeDao.add(new Attribute(attributeName, new HashSet<>()));
+    public AttributeDto add(AttributeDto attributeDto) {
+            return AttributeMapper.INSTANCE.toDto(attributeDao.add(AttributeMapper.INSTANCE.toEntity(attributeDto)));
+        }
+
+    public AttributeDto getById(Long id) {
+        AttributeDto attribute = null;
+        try {
+            attribute = AttributeMapper.INSTANCE.toDto(attributeDao.get(id));
+        } catch (Exception e){
+            e.getStackTrace();
         }
         return attribute;
     }
 
-    public AttributeDto getById(Long id) {
-        return AttributeMapper.entityToDto(getEntityById(id));
-    }
-
-    public Attribute getEntityById(Long id) {
-        return Optional.ofNullable(Optional.ofNullable(this.attributeDao.get(id)).orElse(new Attribute())).get();
+    public AttributeDto getElseAdd(AttributeDto attributeDto){
+        Attribute attribute = attributeDao.getAttrbuteByName(attributeDto.getName());
+        if (attribute == null) {
+            attributeDto = add(attributeDto);
+        }
+        return attributeDto;
     }
 }

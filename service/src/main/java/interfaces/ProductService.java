@@ -7,9 +7,7 @@ import java.util.Collection;
 
 public interface ProductService {
 
-    void add(ProductDto productDto);
-
-    void add(String name, Collection<Long> categoriesId, Collection<String> attributes, String information);
+    ProductDto add(ProductDto productDto);
 
     ProductDto getById(Long id);
 
@@ -24,6 +22,4 @@ public interface ProductService {
     Collection<ProductDto> getByCategoryById(Long categoryId);
 
     Collection<ProductDto> findByAttributes(Collection<Long> listAttributes);
-
-    Collection<ProductDto> findByAttributes(Long attribute);
 }

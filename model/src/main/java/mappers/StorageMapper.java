@@ -2,50 +2,21 @@ package mappers;
 
 import dto.StorageDto;
 import entities.Storage;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-public class StorageMapper {
+@Mapper
+public interface StorageMapper {
 
-    private StorageMapper() {
-    }
+    StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);
 
-    public static StorageDto entityToDto(Storage entity) {
-        StorageDto dto = new StorageDto();
-        dto.setId(entity.getId());
-        dto.setStoreId(entity.getStore().getId());
-        dto.setProductId(entity.getProduct().getId());
-        dto.setPrice(entity.getPrice());
-        dto.setQuantity(entity.getQuantity());
-        return dto;
-    }
+    @Mapping(source = "id", target = "id")
+    StorageDto toDto(Storage entity);
 
-    public static Storage dtoToEntity(StorageDto dto) {
-        Storage entity = new Storage();
-        entity.setId(dto.getId());
-//		entity.setStore(StoreMapper.dtoToEntity(dto.getStore()));
-//		entity.setProduct(ProductMapper.dtoToEntity(dto.getProduct()));
-        entity.setPrice(dto.getPrice());
-        entity.setQuantity(dto.getQuantity());
-        return entity;
-    }
+    Collection<StorageDto> toDto(Collection<Storage> storages);
 
-    public static Collection<StorageDto> convertList(Collection<Storage> entities) {
-        Collection<StorageDto> listDto = new ArrayList<>();
-        for (Storage entity : entities) {
-            StorageDto dto = entityToDto(entity);
-            listDto.add(dto);
-        }
-        return listDto;
-    }
-
-    public static Collection<Storage> convertListDtoToEntity(Collection<StorageDto> listDto) {
-        Collection<Storage> listEntity = new ArrayList<>();
-        for (StorageDto dto : listDto) {
-            Storage entity = dtoToEntity(dto);
-            listEntity.add(entity);
-        }
-        return listEntity;
-    }
+    Storage toEntity(StorageDto dto);
 }

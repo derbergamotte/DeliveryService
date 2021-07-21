@@ -1,8 +1,8 @@
 package implementation;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import dto.CategoryDto;
 import entities.Category;
@@ -16,10 +16,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryDao categoryDao = CategoryDaoImpl.getCategoryDao();
 
+    private static CategoryServiceImpl categoryService;
+
     private CategoryServiceImpl() {
     }
-
-    private static CategoryServiceImpl categoryService;
 
     public static CategoryServiceImpl getCategoryService() {
         if (categoryService == null) {
@@ -28,26 +28,20 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryService;
     }
 
-    public void add(CategoryDto categoryDto) {
-        Category category = CategoryMapper.dtoToEntity(categoryDto);
-        category.setProducts(new HashSet<>());
-        categoryDao.add(category);
-    }
-
-    public void add(String name) {
-        categoryDao.add(new Category(name, new HashSet<>()));
+    public CategoryDto add(CategoryDto categoryDto) {
+        return CategoryMapper.INSTANCE.toDto(categoryDao.add(CategoryMapper.INSTANCE.toEntity(categoryDto)));
     }
 
     public CategoryDto getById(Long id) {
-        return CategoryMapper.entityToDto(getEntityById(id));
+        return CategoryMapper.INSTANCE.toDto(getEntityById(id));
     }
 
     public Category getEntityById(Long id) {
-        return Optional.ofNullable(Optional.ofNullable(this.categoryDao.get(id)).orElse(new Category())).get();
+        return Optional.of(Optional.ofNullable(this.categoryDao.get(id)).orElse(new Category())).get();
     }
 
     public Collection<CategoryDto> getAll() {
-        return CategoryMapper.convertList(categoryDao.getAll());
+        return categoryDao.getAll().stream().map(CategoryMapper.INSTANCE::toDto).collect(Collectors.toSet());
     }
 
     public void remove(Long categoryId) {

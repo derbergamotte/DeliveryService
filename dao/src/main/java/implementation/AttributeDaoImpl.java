@@ -19,12 +19,9 @@ public class AttributeDaoImpl extends GenericDaoImpl<Attribute> implements Attri
     }
 
     public Attribute getAttrbuteByName(String attributeName) {
-        Attribute attribute = new Attribute();
-        for (Attribute attr : getAll()) {
-            if (attr.getName().equals(attributeName)) {
-                attribute = attr;
-            }
-        }
-        return attribute;
+        return getAll().stream()
+                .filter(a -> attributeName.equals(a.getName()))
+                .findAny()
+                .orElse(null);
     }
 }

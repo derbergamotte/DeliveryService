@@ -2,38 +2,21 @@ package mappers;
 
 import dto.ClientDto;
 import entities.Client;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-public class ClientMapper {
+@Mapper
+public interface ClientMapper {
 
-    private ClientMapper() {
-    }
+    ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-    public static ClientDto entityToDto(Client entity) {
-        ClientDto dto = new ClientDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setPhone(entity.getPhone());
-        dto.setAddress(entity.getAddress());
-        return dto;
-    }
+    @Mapping(source = "id", target = "id")
+    ClientDto toDto(Client entity);
 
-    public static Client dtoToEntity(ClientDto dto) {
-        Client entity = new Client();
-        entity.setName(dto.getName());
-        entity.setPhone(dto.getPhone());
-        entity.setAddress(dto.getAddress());
-        return entity;
-    }
+    Collection<ClientDto> toDto(Collection<Client> clients);
 
-    public static Collection<ClientDto> convertList(Collection<Client> entities) {
-        Collection<ClientDto> listDto = new ArrayList<>();
-        for (Client entity : entities) {
-            ClientDto dto = entityToDto(entity);
-            listDto.add(dto);
-        }
-        return listDto;
-    }
+    Client toEntity(ClientDto dto);
 }

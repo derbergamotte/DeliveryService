@@ -7,9 +7,7 @@ import java.util.Collection;
 
 public interface ClientService {
 
-    void add(ClientDto clientDto);
-
-    void add(String name, String address, String phone);
+    ClientDto add(ClientDto clientDto);
 
     ClientDto getById(Long id);
 

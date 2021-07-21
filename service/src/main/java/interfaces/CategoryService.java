@@ -7,9 +7,7 @@ import java.util.Collection;
 
 public interface CategoryService {
 
-    void add(CategoryDto categoryDto);
-
-    void add(String name);
+    CategoryDto add(CategoryDto categoryDto);
 
     CategoryDto getById(Long id);
 

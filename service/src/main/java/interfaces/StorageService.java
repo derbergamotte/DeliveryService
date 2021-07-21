@@ -7,13 +7,9 @@ import java.util.Collection;
 
 public interface StorageService {
 
-    void add(StorageDto storageDto);
-
-    void add(Long storeId, Long productId, Integer price, Integer quantity);
+    StorageDto add(StorageDto storageDto);
 
     StorageDto getById(Long id);
-
-    Storage getEntityById(Long id);
 
     Storage getEntityByStoreAndProduct(Long storeId, Long productId);
 
