@@ -29,11 +29,15 @@ public class AttributeServiceImpl implements AttributeService {
     public AttributeDto getById(Long id) {
         AttributeDto attribute = null;
         try {
-            attribute = AttributeMapper.INSTANCE.toDto(attributeDao.get(id));
+            attribute = AttributeMapper.INSTANCE.toDto(getEntityById(id));
         } catch (Exception e){
             e.getStackTrace();
         }
         return attribute;
+    }
+
+    public Attribute getEntityById(Long id) {
+        return attributeDao.get(id);
     }
 
     public AttributeDto getElseAdd(AttributeDto attributeDto){

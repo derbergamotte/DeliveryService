@@ -11,8 +11,6 @@ public interface StorageService {
 
     StorageDto getById(Long id);
 
-    Storage getEntityByStoreAndProduct(Long storeId, Long productId);
-
     Collection<StorageDto> getAll();
 
     void remove(Long id);

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,10 +44,8 @@ public abstract class GenericDaoImpl<T extends BaseEntity> implements GenericDao
             File file = getFile(id);
             ObjectMapper mapper = new ObjectMapper();
             entity = mapper.readValue(file, clazz);
-        } catch (NullPointerException e) {
-            System.out.println("This object doesn't exist");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (NullPointerException | IOException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
         }
         return entity;
     }
@@ -57,7 +56,8 @@ public abstract class GenericDaoImpl<T extends BaseEntity> implements GenericDao
         List<T> listEntities = new ArrayList<>();
         try {
             listEntities = Files.walk(Paths.get(getDirectoryPath()))
-                    .filter(p -> !p.getFileName().equals(Paths.get("autoincrement"))).filter(Files::isRegularFile)
+                    .filter(p -> !p.getFileName().equals(Paths.get("autoincrement")))
+                    .filter(Files::isRegularFile)
                     .map(p -> {
                         T entity = null;
                         try {

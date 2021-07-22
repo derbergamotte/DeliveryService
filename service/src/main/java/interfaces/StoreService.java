@@ -11,8 +11,6 @@ public interface StoreService {
 
     StoreDto getById(Long id);
 
-    Store getEntityById(Long id);
-
     Collection<StoreDto> getAll();
 
     void remove(Long orderId);

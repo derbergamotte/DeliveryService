@@ -35,11 +35,6 @@ public class ClientServiceImpl implements ClientService {
         return ClientMapper.INSTANCE.toDto(getEntityById(id));
     }
 
-    //TODO: Generate error
-    public Client getEntityById(Long id) {
-        return Optional.ofNullable(Optional.ofNullable(this.clientDao.get(id)).orElse(new Client())).get();
-    }
-
     public Collection<ClientDto> getAll() {
         return ClientMapper.INSTANCE.toDto(clientDao.getAll());
     }
@@ -62,5 +57,9 @@ public class ClientServiceImpl implements ClientService {
             }
             clientDao.update(client);
         }
+    }
+
+    private Client getEntityById(Long id) {
+        return clientDao.get(id);
     }
 }

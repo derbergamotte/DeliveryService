@@ -1,8 +1,8 @@
 package implementation;
 
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
 
 import dto.StoreDto;
 import entities.Store;
@@ -35,10 +35,6 @@ public class StoreServiceImpl implements StoreService {
         return StoreMapper.INSTANCE.toDto(getEntityById(id));
     }
 
-    public Store getEntityById(Long id) {
-        return Optional.of(Optional.ofNullable(this.storeDao.get(id)).orElse(new Store())).get();
-    }
-
     public Collection<StoreDto> getAll() {
         return StoreMapper.INSTANCE.toDto(storeDao.getAll());
     }
@@ -48,8 +44,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     public void update(StoreDto storeDto) {
-        if (!(storeDto.getId() == null)) {
-            Store store = getEntityById(storeDto.getId());
+        Store store = getEntityById(storeDto.getId());
+        if (!(storeDto.getId() == null) && !(store == null)) {
             if (StringUtils.isNotEmpty(storeDto.getName())) {
                 store.setName(storeDto.getName());
             }
@@ -61,5 +57,9 @@ public class StoreServiceImpl implements StoreService {
             }
             storeDao.update(store);
         }
+    }
+
+    private Store getEntityById(Long id) {
+        return storeDao.get(id);
     }
 }

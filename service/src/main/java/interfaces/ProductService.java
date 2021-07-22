@@ -11,8 +11,6 @@ public interface ProductService {
 
     ProductDto getById(Long id);
 
-    Product getEntityById(Long id);
-
     Collection<ProductDto> getAll();
 
     void remove(Long orderId);

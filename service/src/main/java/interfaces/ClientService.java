@@ -11,8 +11,6 @@ public interface ClientService {
 
     ClientDto getById(Long id);
 
-    Client getEntityById(Long id);
-
     Collection<ClientDto> getAll();
 
     void remove(Long id);

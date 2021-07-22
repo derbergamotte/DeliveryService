@@ -32,6 +32,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private Order getEntity(Long id) {
-		return Optional.ofNullable(Optional.ofNullable(this.orderDao.get(id)).orElse(new Order())).get();
+		return orderDao.get(id);
 	}
 }

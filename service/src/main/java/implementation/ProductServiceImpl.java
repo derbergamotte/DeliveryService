@@ -20,7 +20,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDao productDao = ProductDaoImpl.getProductDao();
     private final AttributeService attributeService = AttributeServiceImpl.getAttributeService();
     private final CategoryService categoryService = CategoryServiceImpl.getCategoryService();
-
     private static ProductServiceImpl productService;
 
     private ProductServiceImpl() {
@@ -40,10 +39,6 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductDto getById(Long id) {
         return ProductMapper.INSTANCE.toDto(getEntityById(id));
-    }
-
-    public Product getEntityById(Long id) {
-        return Optional.of(Optional.ofNullable(this.productDao.get(id)).orElse(new Product())).get();
     }
 
     public Collection<ProductDto> getAll() {
@@ -68,13 +63,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Collection<ProductDto> getByCategoryById(Long categoryId) {
-        return ProductMapper.INSTANCE.toDto(productDao.findByCategory(CategoryMapper.INSTANCE.toEntity(categoryService.getById(categoryId))));
+        return ProductMapper.INSTANCE.toDto(productDao.findByCategory(categoryService.getEntityById(categoryId)));
     }
 
     public Collection<ProductDto> findByAttributes(Collection<Long> listAttributesId) {
         return ProductMapper.INSTANCE.toDto(productDao.findByAttributes(
                 listAttributesId.stream()
-                        .map(a -> AttributeMapper.INSTANCE.toEntity(attributeService.getById(a)))
+                        .map(attributeService::getEntityById)
                         .collect(Collectors.toSet())));
+    }
+
+    private Product getEntityById(Long id) {
+        return productDao.get(id);
     }
 }

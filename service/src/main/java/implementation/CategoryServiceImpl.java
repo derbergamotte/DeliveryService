@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category getEntityById(Long id) {
-        return Optional.of(Optional.ofNullable(this.categoryDao.get(id)).orElse(new Category())).get();
+        return categoryDao.get(id);
     }
 
     public Collection<CategoryDto> getAll() {
